@@ -10,16 +10,15 @@ def main(argv):
             j = parse_jff(file)
         else:
             j = json.load(file)
+            # Hacer la comprobación del lenguaje.
+            # Solo en formato JSON ya que JFlap no exporta ningún atributo con el lenguaje.
             for qs in j['Delta']:
                 for i in j['Delta'][qs]:
                     if j['Delta'][qs][i]['e'] not in j['Gamma']:
                         print('La trama no pertenece al lenguaje')
                         return
 
-        arg = ""
-        if len(argv) > 1:
-            arg = argv[1]
-
+        arg = argv[1] if len(argv) > 1 else ""
         solve(j, arg)
 
 
@@ -30,44 +29,52 @@ def solve(json_data, trama: str):
     q = start
     index = 0
     center = 0
+    last_print = ""
+    last_index = 0
 
     if len(trama) == 0:
         trama = empty
 
-    while True:
-        if q in end:
-            print('OK')
-            break
+    _print(trama, 0)
+    while q not in end:
         for i in json_data['Delta'][q]:
-            if (index + 1) == 0:
-                time.sleep(1)
-                trama = empty + trama
-                center += 1
-                index = center - 1
-            elif (index + 1) > len(trama):
-                time.sleep(1)
-                trama += empty
             s = trama[index]
             if json_data['Delta'][q][i]['e'] == s:
                 if "w" in dict(json_data['Delta'][q][i]).keys():
                     trama = trama[:index] + json_data['Delta'][q][i]['w'] + trama[index + 1:]
-                    time.sleep(1)
                 if str(json_data['Delta'][q][i]['m']).lower() == 'r':
                     index += 1
                 if str(json_data['Delta'][q][i]['m']).lower() == 'l':
                     index -= 1
                 q = json_data['Delta'][q][i]['q']
-                if q in end:
-                    break
-            _print(trama, index)
+            if (index + 1) == 0:
+                trama = empty + trama
+                center += 1
+                index = 0
+            elif (index + 1) > len(trama):
+                trama += empty
+            if last_print != trama or last_index != index:
+                print('Index: ', index)
+                _print(trama, index)
+                last_index = index
+                last_print = trama
+                time.sleep(1)
+            if q in end:
+                print('OK')
 
 
 def _print(trama, index):
     print(trama)
     print(" " * index + "^")
+    time.sleep(1)
 
 
 def parse_jff(file):
+    """
+    Parsea el .jff (XML) a formato JSON.
+    :param file:
+    :return json:
+    """
     xml = xmltodict.parse(file.read())
 
     j = {
