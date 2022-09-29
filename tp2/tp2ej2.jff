@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><!--Created with JFLAP 6.4.--><structure>
+	<type>turing</type>
+	<automaton>
+		<!--The list of states.-->
+		<block id="1" name="q1">
+			<tag>Machine1</tag>
+			<x>534.0</x>
+			<y>209.0</y>
+			<initial/>
+		</block>
+		<block id="2" name="q2">
+			<tag>Machine2</tag>
+			<x>817.0</x>
+			<y>209.0</y>
+		</block>
+		<block id="3" name="q3">
+			<tag>Machine3</tag>
+			<x>997.0</x>
+			<y>216.0</y>
+			<final/>
+		</block>
+		<!--The list of transitions.-->
+		<transition>
+			<from>2</from>
+			<to>2</to>
+			<read>+</read>
+			<write>|</write>
+			<move>R</move>
+		</transition>
+		<transition>
+			<from>2</from>
+			<to>2</to>
+			<read>|</read>
+			<write>|</write>
+			<move>R</move>
+		</transition>
+		<transition>
+			<from>1</from>
+			<to>2</to>
+			<read>|</read>
+			<write/>
+			<move>R</move>
+		</transition>
+		<transition>
+			<from>2</from>
+			<to>3</to>
+			<read/>
+			<write/>
+			<move>S</move>
+		</transition>
+		<!--The list of automata-->
+		<Machine2/>
+		<Machine1/>
+		<Machine3/>
+	</automaton>
+</structure>
