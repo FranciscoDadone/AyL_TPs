@@ -11,7 +11,7 @@ class ParserD(object):
 
         Gramática LL1:
             S -> F
-            S -> ε
+            S -> $
             F -> aS
             F -> bS
     """
